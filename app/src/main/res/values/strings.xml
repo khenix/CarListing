@@ -1,3 +1,10 @@
 <resources>
-	<string name="app_name">MobileExam</string>
+	<string name="app_name">Mobile</string>
+
+
+	<string name="brand">Brand: %1$s</string>
+	<string name="brand_model">Model: %1$s</string>
+
+	<!-- sorting -->
+	<string name="sort">Sort</string>
 </resources>
