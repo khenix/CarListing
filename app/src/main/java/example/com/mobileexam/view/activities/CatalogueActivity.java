@@ -3,6 +3,7 @@ package example.com.mobileexam.view.activities;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import example.com.mobileexam.Injection;
 import example.com.mobileexam.R;
 import example.com.mobileexam.utils.ActivityUtils;
 import example.com.mobileexam.view.fragments.CarsFragment;
@@ -30,7 +31,10 @@ public class CatalogueActivity extends AppCompatActivity {
 //
 
     // Create the presenter
-    cataloguePresenter = new CataloguePresenter(this, carListFragment);
+    //    cataloguePresenter = new CataloguePresenter(this, carListFragment);
+    cataloguePresenter = new CataloguePresenter(Injection.provideCarsRepository(getApplicationContext()),
+        Injection.provideCarDetailsRepository(getApplicationContext()),
+        this, carListFragment);
 
 
     // Load previously saved state, if available.

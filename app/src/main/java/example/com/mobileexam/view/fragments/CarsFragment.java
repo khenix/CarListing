@@ -99,6 +99,8 @@ public class CarsFragment extends Fragment implements CatalogueContract.View {
           makeLog("will load more... " + page);
           makeLog(mPresenter.getSorting());
           mPresenter.loadCarList(false, page);
+        } else {
+          // no more time to implement chunking so lets do nothing for now
         }
       }
     };
