@@ -11,6 +11,7 @@ import example.com.mobileexam.BuildConfig;
 import example.com.mobileexam.helper.VolleyRequestHelper;
 import example.com.mobileexam.model.dto.CatalogueResponseDTO;
 import example.com.mobileexam.model.dto.CatalogueResult;
+import example.com.mobileexam.utils.NetConnection;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static example.com.mobileexam.utils.Parser.parseGeneric;
@@ -45,11 +46,17 @@ public class CataloguePresenter implements CatalogueContract.Presenter {
 
   @Override
   public void loadCarList(boolean willForceUpdate, int page) {
-    String url = BuildConfig.API_URL + "/api/cars/page:" + page + "/maxitems:10/";
+    if (NetConnection.isConnected(context)) {
+      String url;
+      if (getSorting() == null)
+        url = BuildConfig.API_URL + "/api/cars/page:" + page + "/maxitems:10/";
+      else
+        url = BuildConfig.API_URL + "/api/cars/page:" + page + "/maxitems:10/sort:" + getSorting();
 
-    makeLog(url);
-    mCatalogueView.showLoader();
-    volleyRequestHelper.makeStringGETRequest(url, "cars");
+      makeLog(url);
+      mCatalogueView.showLoader();
+      volleyRequestHelper.makeStringGETRequest(url, "cars");
+    }
   }
 
   @Override
