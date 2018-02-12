@@ -6,9 +6,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -21,6 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import example.com.mobileexam.R;
 import example.com.mobileexam.model.dto.CatalogueResult;
+import example.com.mobileexam.utils.NetConnection;
 import example.com.mobileexam.view.InfiniteScrollListener;
 import example.com.mobileexam.view.adapters.CarsAdapter;
 
@@ -92,10 +95,11 @@ public class CarsFragment extends Fragment implements CatalogueContract.View {
       @Override
       public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
 
-        makeLog("will load more... " + page);
-        makeLog(mPresenter.getSorting());
-        mPresenter.loadCarList(false, page);
-
+        if (NetConnection.isConnected(getActivity())) {
+          makeLog("will load more... " + page);
+          makeLog(mPresenter.getSorting());
+          mPresenter.loadCarList(false, page);
+        }
       }
     };
 
@@ -154,7 +158,37 @@ public class CarsFragment extends Fragment implements CatalogueContract.View {
 
   @OnClick(R.id.action_sort)
   void showSortMenu() {
-// todo
+    PopupMenu popupMenu = new PopupMenu(getActivity(), actionBar);
+    popupMenu.getMenuInflater().inflate(R.menu.sorting, popupMenu.getMenu());
+
+    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+      @Override
+      public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+          case R.id.date_oldest:
+            mPresenter.setSorting(getString(R.string.sort_date_oldest));
+            break;
+          case R.id.date_newest:
+            mPresenter.setSorting(getString(R.string.sort_date_newest));
+            break;
+          case R.id.price_low:
+            mPresenter.setSorting(getString(R.string.sort_price_low));
+            break;
+          case R.id.price_high:
+            mPresenter.setSorting(getString(R.string.sort_price_high));
+            break;
+          case R.id.mileage_low:
+            mPresenter.setSorting(getString(R.string.sort_mileage_low));
+            break;
+          case R.id.mileage_high:
+            mPresenter.setSorting(getString(R.string.sort_mileage_high));
+            break;
+        }
+        return true;
+      }
+    });
+
+    popupMenu.show();
   }
 
   @Override

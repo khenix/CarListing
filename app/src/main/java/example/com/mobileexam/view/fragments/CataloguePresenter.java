@@ -26,6 +26,7 @@ public class CataloguePresenter implements CatalogueContract.Presenter {
   List<CatalogueResult> localList = new ArrayList<>();
   private final Context context;
   private VolleyRequestHelper volleyRequestHelper;
+  private String sorting;
 
 
   public CataloguePresenter(Context context, @NonNull CatalogueContract.View catalogueView) {
@@ -52,19 +53,24 @@ public class CataloguePresenter implements CatalogueContract.Presenter {
   }
 
   @Override
+  public void openCarDetails(@NonNull CatalogueResult catalogueResult) {
+    checkNotNull(catalogueResult, "catalogueResult cannot be null!");
+    mCatalogueView.showDetail(catalogueResult.getId());
+  }
+
+  @Override
   public void setSorting(String sorting) {
-    //todo
+    this.sorting = sorting;
+    makeLog("sorting: " + sorting);
+    mCatalogueView.resetData();
+
   }
 
   @Override
   public String getSorting() {
-    return null; // todo
+    return sorting;
   }
 
-  @Override
-  public void openCarDetails(@NonNull CatalogueResult catalogueResult) {
-
-  }
 
   /* The request completed listener */
   private VolleyRequestHelper.OnRequestCompletedListener requestCompletedListener = new VolleyRequestHelper.OnRequestCompletedListener() {

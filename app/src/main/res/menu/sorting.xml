@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<item
+		android:id="@+id/date_oldest"
+		android:title="@string/date_oldest"/>
+
+	<item
+		android:id="@+id/date_newest"
+		android:title="@string/date_newest"/>
+
+	<item
+		android:id="@+id/price_low"
+		android:title="@string/price_low"/>
+
+	<item
+		android:id="@+id/price_high"
+		android:title="@string/price_high"/>
+
+	<item
+		android:id="@+id/mileage_low"
+		android:title="@string/mileage_low"/>
+
+	<item
+		android:id="@+id/mileage_high"
+		android:title="@string/mileage_high"/>
+
+</menu>
