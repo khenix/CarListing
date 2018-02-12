@@ -6,11 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -23,6 +21,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import example.com.mobileexam.R;
 import example.com.mobileexam.model.dto.CatalogueResult;
+import example.com.mobileexam.view.InfiniteScrollListener;
+import example.com.mobileexam.view.adapters.CarsAdapter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -42,6 +42,7 @@ public class CarsFragment extends Fragment implements CatalogueContract.View {
   }
 
   CatalogueContract.Presenter mPresenter;
+  CarsAdapter carsAdapter;
   @BindView(R.id.rv_cars)
   RecyclerView rvCars;
 
@@ -51,9 +52,14 @@ public class CarsFragment extends Fragment implements CatalogueContract.View {
   @BindView(R.id.action_bar)
   View actionBar;
 
+  LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+  private InfiniteScrollListener infiniteScrollListener;
+
+
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    carsAdapter = new CarsAdapter(getActivity(), new ArrayList<CatalogueResult>(0), mItemListener);
   }
 
 
@@ -72,6 +78,9 @@ public class CarsFragment extends Fragment implements CatalogueContract.View {
   public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     ButterKnife.bind(this, view);
+    rvCars.setLayoutManager(linearLayoutManager);
+    rvCars.setAdapter(carsAdapter);
+
     swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
       @Override
       public void onRefresh() {
@@ -79,6 +88,18 @@ public class CarsFragment extends Fragment implements CatalogueContract.View {
       }
     });
 
+    infiniteScrollListener = new InfiniteScrollListener(linearLayoutManager) {
+      @Override
+      public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+
+        makeLog("will load more... " + page);
+        makeLog(mPresenter.getSorting());
+        mPresenter.loadCarList(false, page);
+
+      }
+    };
+
+    rvCars.addOnScrollListener(infiniteScrollListener);
 
 
   }
@@ -116,7 +137,7 @@ public class CarsFragment extends Fragment implements CatalogueContract.View {
 
   @Override
   public void showData(List<CatalogueResult> catalogueResults) {
-
+    carsAdapter.swap(catalogueResults);
 
   }
 
@@ -133,12 +154,32 @@ public class CarsFragment extends Fragment implements CatalogueContract.View {
 
   @OnClick(R.id.action_sort)
   void showSortMenu() {
-    // todo
+// todo
   }
 
   @Override
   public void resetData() {
-    // todo
+    makeLog("refresh data");
+    carsAdapter = new CarsAdapter(getActivity(), new ArrayList<CatalogueResult>(0), mItemListener);
+    rvCars.setAdapter(carsAdapter);
+    rvCars.invalidate();
+    infiniteScrollListener.resetState();
+    hideLoader();
+    mPresenter.start();
+  }
+
+  /**
+   * Listener for clicks on cars in the RecyclerView.
+   */
+  CarsAdapter.CarItemListener mItemListener = new CarsAdapter.CarItemListener() {
+    @Override
+    public void onCarClick(CatalogueResult clickedCar) {
+      mPresenter.openCarDetails(clickedCar);
+    }
+  };
+
+  private void makeLog(String message) {
+    Log.w(TAG, "*****---->>> " + message);
   }
 
 }
