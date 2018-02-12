@@ -7,6 +7,7 @@ import com.android.volley.toolbox.Volley;
 
 /**
  * Created by kestrella on 2/9/18.
+ * Global to the whole app
  */
 
 public class App extends Application {

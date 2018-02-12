@@ -1,5 +1,5 @@
 <resources>
-	<string name="app_name">Mobile</string>
+	<string name="app_name">Carmudi App Exam</string>
 
 
 	<string name="brand">Brand: %1$s</string>
@@ -7,4 +7,18 @@
 
 	<!-- sorting -->
 	<string name="sort">Sort</string>
+	<string name="sort_choose">Choose Sorting Order</string>
+	<string name="date_oldest">Date: Oldest-Newest</string>
+	<string name="date_newest">Date: Newest-Oldest</string>
+	<string name="price_low">Price: Lowest-Highest</string>
+	<string name="price_high">Price: Highest-Lowest</string>
+	<string name="mileage_low">Mileage: Lowest-Highest</string>
+	<string name="mileage_high">Mileage: Highest-Lowest</string>
+
+	<string name="sort_date_oldest">oldest</string>
+	<string name="sort_date_newest">newest</string>
+	<string name="sort_price_low">price-low</string>
+	<string name="sort_price_high">price-high</string>
+	<string name="sort_mileage_low">mileage-low</string>
+	<string name="sort_mileage_high">mileage-high</string>
 </resources>
